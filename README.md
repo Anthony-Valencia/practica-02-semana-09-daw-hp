@@ -110,17 +110,7 @@ Códigos usados: **405** método no permitido · **422** datos inválidos · **4
 | Madurez del ecosistema | Composer/Packagist, Laravel, Symfony, WordPress; hosting barato y masivo. | Jakarta EE, Spring, Maven/Gradle; fuerte en entornos empresariales y bancarios.                                             |
 | Curva de aprendizaje   | Baja.                                                                     | Media-alta.                                                                                                                 |
 
-## 6. Evidencias (completar con capturas)
-
-Guardar en `capturas/`: formulario y tabla de PHP y JSP, salida de `pruebas-http.sh`, logs (`php-server.log`, `catalina.out`, `localhost_access_log`) y `tree` de carpetas.
-
-```bash
-bash scripts/pruebas-http.sh php | tee capturas/pruebas-php.txt
-bash scripts/pruebas-http.sh jsp | tee capturas/pruebas-jsp.txt
-curl -i -X POST -d "nombre=Ana&correo=ana@mail.com" http://localhost:8000/procesar.php
-```
-
-## 7. Subir a GitHub desde Termux
+## 6. Subir a GitHub desde Termux
 
 ```bash
 cd lab09-registro-contacto
