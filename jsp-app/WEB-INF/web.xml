@@ -17,6 +17,8 @@
   </session-config>
 
   <!-- Manejo de errores 4xx / 5xx -->
+  <error-page><error-code>403</error-code><location>/error.jsp</location></error-page>
+  <error-page><error-code>409</error-code><location>/error.jsp</location></error-page>
   <error-page><error-code>404</error-code><location>/error.jsp</location></error-page>
   <error-page><error-code>405</error-code><location>/error.jsp</location></error-page>
   <error-page><error-code>422</error-code><location>/error.jsp</location></error-page>
