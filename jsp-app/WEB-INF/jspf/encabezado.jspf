@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><c:out value="${titulo}"/> | Lab 09 JSP</title>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/style.css">
+</head>
+<body>
+  <nav class="nav">
+    <a href="${pageContext.request.contextPath}/index.jsp">Inicio</a>
+    <a href="${pageContext.request.contextPath}/registros.jsp">Registros</a>
+  </nav>
+  <main class="card">
+    <h2><c:out value="${titulo}"/></h2>

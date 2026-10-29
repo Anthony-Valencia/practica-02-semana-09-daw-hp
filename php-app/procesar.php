@@ -1,14 +1,12 @@
 <?php
 declare(strict_types=1);
-require __DIR__ . '/lib.php';
-
-const MAX_REGISTROS = 50;
+require_once __DIR__ . '/lib.php';
 
 try {
-    // 1) Solo se acepta POST
-    if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
-        header('Allow: POST');
-        error_http(405, 'Método no permitido. Usa el formulario (POST).');
+    // 1) Solo POST + token CSRF
+    solo_post();
+    if (!csrf_valido()) {
+        error_http(403, 'Token CSRF inválido o ausente. Recarga el formulario.');
     }
 
     // 2) Obtener y sanitizar entradas
@@ -30,25 +28,27 @@ try {
         error_http(422, implode(' ', $errores));
     }
 
-    // 4) Guardar en $_SESSION (se escapa al imprimir)
+    // 4) Evitar correos duplicados (409 Conflict)
     iniciar_sesion();
-    $_SESSION['registros'][] = ['nombre' => $nombre, 'correo' => $correo];
+    foreach ($_SESSION['registros'] ?? [] as $r) {
+        if (strcasecmp($r['correo'], $correo) === 0) {
+            error_http(409, 'Ese correo ya está registrado.');
+        }
+    }
+
+    // 5) Guardar en $_SESSION (se escapa al imprimir)
+    $_SESSION['registros'][] = [
+        'id' => bin2hex(random_bytes(4)),
+        'nombre' => $nombre,
+        'correo' => $correo,
+    ];
     if (count($_SESSION['registros']) > MAX_REGISTROS) {
         array_shift($_SESSION['registros']);
     }
 
-    // 5) Respuesta: tabla de registros
-    $filas = '';
-    foreach ($_SESSION['registros'] as $i => $r) {
-        $filas .= '<tr><td>' . ($i + 1) . '</td><td>' . e($r['nombre']) . '</td><td>' . e($r['correo']) . '</td></tr>';
-    }
-    pagina(
-        200,
-        'Registros almacenados',
-        '<p class="ok">Registro guardado correctamente.</p>'
-        . "<table border='1'><tr><th>#</th><th>Nombre</th><th>Correo</th></tr>$filas</table>"
-        . '<p><a href="/index.html">Registrar otro contacto</a></p>'
-    );
+    // 6) Post/Redirect/Get: evita reenvío al refrescar
+    flash_set('Registro guardado correctamente.');
+    redirigir('/registros.php');
 } catch (Throwable $ex) {
     error_log('[procesar.php] ' . $ex->getMessage());
     error_http(500, 'Error interno del servidor.');

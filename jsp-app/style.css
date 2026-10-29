@@ -1,12 +1,21 @@
-body{font-family:system-ui,Arial,sans-serif;background:#f4f6f8;margin:0;padding:1rem;color:#1f2937}
-.card{max-width:640px;margin:1.5rem auto;background:#fff;padding:1.5rem;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
-h2,h3{margin-top:0}
-label{display:block;margin:.75rem 0 .25rem;font-weight:600}
-input{width:100%;padding:.6rem;border:1px solid #cbd5e1;border-radius:8px;box-sizing:border-box;font-size:1rem}
-button{margin-top:1rem;padding:.6rem 1.2rem;background:#166534;color:#fff;border:0;border-radius:8px;font-size:1rem;cursor:pointer}
+:root{--bg:#f4f6f8;--card:#fff;--text:#1f2937;--muted:#64748b;--border:#e2e8f0;--head:#f1f5f9;--link:#1d4ed8;--ok:#166534;--err:#b91c1c;--btn:#166534;--btn-danger:#b91c1c}
+@media (prefers-color-scheme:dark){:root{--bg:#0f172a;--card:#1e293b;--text:#e2e8f0;--muted:#94a3b8;--border:#334155;--head:#273449;--link:#93c5fd;--ok:#4ade80;--err:#f87171}}
+*{box-sizing:border-box}
+body{font-family:system-ui,Arial,sans-serif;background:var(--bg);color:var(--text);margin:0;padding:1rem}
+.nav{max-width:680px;margin:0 auto;display:flex;gap:1rem;padding:.25rem .5rem}
+.nav a{color:var(--link);text-decoration:none;font-weight:600}
+.card{max-width:680px;margin:.75rem auto;background:var(--card);padding:1.5rem;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.12)}
+h2{margin-top:0}
+label{display:block;margin:.9rem 0 .25rem;font-weight:600}
+input[type=text],input[type=email]{width:100%;padding:.65rem;border:1px solid var(--border);border-radius:8px;font-size:1rem;background:var(--bg);color:var(--text)}
+button{margin-top:1rem;padding:.6rem 1.2rem;background:var(--btn);color:#fff;border:0;border-radius:8px;font-size:1rem;cursor:pointer}
+button.peligro{background:var(--btn-danger);margin:0;padding:.35rem .7rem;font-size:.85rem}
+form.inline{display:inline}
+.tabla{overflow-x:auto}
 table{width:100%;border-collapse:collapse;margin:.75rem 0}
-th,td{border:1px solid #e2e8f0;padding:.5rem;text-align:left}
-th{background:#f1f5f9}
-.error{color:#b91c1c;font-weight:600}
-.ok{color:#166534;font-weight:600}
-a{color:#1d4ed8}
+th,td{border:1px solid var(--border);padding:.5rem;text-align:left}
+th{background:var(--head)}
+.error{color:var(--err);font-weight:600}
+.ok{color:var(--ok);font-weight:600}
+.muted{color:var(--muted)}
+a{color:var(--link)}

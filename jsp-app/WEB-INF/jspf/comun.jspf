@@ -1,0 +1,37 @@
+<%@ page import="java.util.*, java.security.SecureRandom, java.security.MessageDigest, java.nio.charset.StandardCharsets" %>
+<%!
+  private static final SecureRandom RNG = new SecureRandom();
+  private static final int MAX_REGISTROS = 50;
+
+  /** Token CSRF de la sesión (se crea si no existe). */
+  private static String tokenCsrf(HttpSession s) {
+    synchronized (s) {
+      String t = (String) s.getAttribute("csrf");
+      if (t == null) {
+        byte[] b = new byte[32];
+        RNG.nextBytes(b);
+        StringBuilder sb = new StringBuilder();
+        for (byte x : b) sb.append(String.format("%02x", x));
+        t = sb.toString();
+        s.setAttribute("csrf", t);
+      }
+      return t;
+    }
+  }
+
+  /** Compara en tiempo constante el token recibido con el de la sesión. */
+  private static boolean csrfValido(HttpServletRequest req, HttpSession s) {
+    String enviado = req.getParameter("csrf");
+    String real = (String) s.getAttribute("csrf");
+    return enviado != null && real != null
+        && MessageDigest.isEqual(enviado.getBytes(StandardCharsets.UTF_8), real.getBytes(StandardCharsets.UTF_8));
+  }
+%>
+<%
+  // Cabeceras de seguridad HTTP
+  response.setHeader("X-Content-Type-Options", "nosniff");
+  response.setHeader("X-Frame-Options", "DENY");
+  response.setHeader("Referrer-Policy", "no-referrer");
+  response.setHeader("Content-Security-Policy",
+      "default-src 'self'; style-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'");
+%>

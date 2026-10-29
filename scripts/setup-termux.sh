@@ -6,7 +6,7 @@ TOMCAT_VERSION="${TOMCAT_VERSION:-9.0.98}"
 TOMCAT_DIR="$HOME/tomcat9"
 
 pkg update -y
-pkg install -y php openjdk-17 curl git tar
+pkg install -y php openjdk-21 curl git tar
 
 if [ ! -d "$TOMCAT_DIR/bin" ]; then
   echo ">> Descargando Tomcat $TOMCAT_VERSION ..."
