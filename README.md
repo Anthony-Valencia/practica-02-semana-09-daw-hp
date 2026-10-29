@@ -109,19 +109,3 @@ Códigos usados: **405** método no permitido · **422** datos inválidos · **4
 | Tipado y errores       | Dinámico (tipado opcional en PHP 8).                                      | Estático (Java), errores de compilación tempranos.                                                                          |
 | Madurez del ecosistema | Composer/Packagist, Laravel, Symfony, WordPress; hosting barato y masivo. | Jakarta EE, Spring, Maven/Gradle; fuerte en entornos empresariales y bancarios.                                             |
 | Curva de aprendizaje   | Baja.                                                                     | Media-alta.                                                                                                                 |
-
-## 6. Subir a GitHub desde Termux
-
-```bash
-cd lab09-registro-contacto
-git config --global user.name "Tu Nombre"
-git config --global user.email "tu@correo.com"
-git init
-git add .
-git commit -m "Lab 09: Sistema de Registro de Contacto PHP y JSP"
-git branch -M main
-git remote add origin https://github.com/Anthony-Valencia/practica-02-semana-09-daw-hp.git
-git push -u origin main
-```
-
-El token se crea en GitHub → Settings → Developer settings → Personal access tokens (permiso `repo`).
