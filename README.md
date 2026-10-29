@@ -1,16 +1,12 @@
 # Lab 09A – Sistema de Registro de Contacto (PHP vs JSP)
 
 **Universidad Nacional del Centro del Perú – Facultad de Ingeniería de Sistemas**
-Asignatura: Desarrollo de Aplicaciones Web (IS093A) · Unidad II · Guía Práctica Grupal Semana 09
+Asignatura: Desarrollo de Aplicaciones Web (IS093A) · Unidad II · Práctica Grupal Semana 09
 
-**Integrantes:** _(completar: Apellidos y Nombres – rol técnico)_
+**Integrantes:**
 
-| Rol | Integrante |
-|---|---|
-| Arquitecto de Despliegue | |
-| Desarrollador PHP | |
-| Desarrollador JSP | |
-| QA & Documentador | |
+- HINOJOSA YARANGA RENZO SEBASTIAN
+- VALENCIA BERNAOLA ANDRES ANTHONY
 
 ---
 
@@ -57,12 +53,12 @@ bash scripts/pruebas-http.sh php
 bash scripts/pruebas-http.sh jsp
 ```
 
-| Elemento | PHP | JSP |
-|---|---|---|
-| Servidor | PHP built-in server (equivale a XAMPP/Apache en PC) | Apache Tomcat 9.0.x |
-| Puerto | 8000 | 8080 |
-| Ruta de despliegue | `php-app/` (equivale a `htdocs/`) | `~/tomcat9/webapps/jsp-app/` |
-| Logs | `logs/php-server.log` | `~/tomcat9/logs/catalina.out`, `localhost_access_log.*.txt` |
+| Elemento           | PHP                                                 | JSP                                                         |
+| ------------------ | --------------------------------------------------- | ----------------------------------------------------------- |
+| Servidor           | PHP built-in server (equivale a XAMPP/Apache en PC) | Apache Tomcat 9.0.x                                         |
+| Puerto             | 8000                                                | 8080                                                        |
+| Ruta de despliegue | `php-app/` (equivale a `htdocs/`)                   | `~/tomcat9/webapps/jsp-app/`                                |
+| Logs               | `logs/php-server.log`                               | `~/tomcat9/logs/catalina.out`, `localhost_access_log.*.txt` |
 
 En PC con XAMPP: copiar `php-app/` a `C:\xampp\htdocs\` y `jsp-app/` a `webapps/` de Tomcat (puertos 80/8080).
 
@@ -89,30 +85,30 @@ Resumen: **Cliente → DNS → TCP/IP → HTTP Request → Servidor → Backend 
 
 ## 4. Seguridad básica
 
-| Control | PHP | JSP |
-|---|---|---|
-| Solo método POST | `$_SERVER['REQUEST_METHOD'] !== 'POST'` → 405 + `Allow: POST` | `request.getMethod()` → `sendError(405)` |
-| Prevención XSS (salida) | `htmlspecialchars(..., ENT_QUOTES, 'UTF-8')` vía `e()` | `<c:out value="${...}"/>` (escapeXml=true) |
-| Validación de entrada | `filter_input`, `FILTER_VALIDATE_EMAIL`, regex Unicode, longitudes | `Pattern` (regex) y longitudes |
-| Sanitización | `trim` + eliminación de caracteres de control | `trim` + `\p{Cntrl}` |
-| Errores 4xx/5xx | `error_http()` + `try/catch` (500 sin filtrar detalles) | `web.xml` `<error-page>` → `error.jsp` |
-| Sesión | cookie `HttpOnly` + `SameSite=Lax` | `<http-only>true</http-only>` |
-| Límite de datos | máx. 50 registros por sesión | máx. 50 registros por sesión |
+| Control                 | PHP                                                                | JSP                                        |
+| ----------------------- | ------------------------------------------------------------------ | ------------------------------------------ |
+| Solo método POST        | `$_SERVER['REQUEST_METHOD'] !== 'POST'` → 405 + `Allow: POST`      | `request.getMethod()` → `sendError(405)`   |
+| Prevención XSS (salida) | `htmlspecialchars(..., ENT_QUOTES, 'UTF-8')` vía `e()`             | `<c:out value="${...}"/>` (escapeXml=true) |
+| Validación de entrada   | `filter_input`, `FILTER_VALIDATE_EMAIL`, regex Unicode, longitudes | `Pattern` (regex) y longitudes             |
+| Sanitización            | `trim` + eliminación de caracteres de control                      | `trim` + `\p{Cntrl}`                       |
+| Errores 4xx/5xx         | `error_http()` + `try/catch` (500 sin filtrar detalles)            | `web.xml` `<error-page>` → `error.jsp`     |
+| Sesión                  | cookie `HttpOnly` + `SameSite=Lax`                                 | `<http-only>true</http-only>`              |
+| Límite de datos         | máx. 50 registros por sesión                                       | máx. 50 registros por sesión               |
 
 Códigos usados: **405** método no permitido · **422** datos inválidos · **404** no encontrado · **403** acceso prohibido (PHP) · **500** error interno.
 
 ## 5. Matriz comparativa PHP vs JSP
 
-| Criterio | PHP | JSP |
-|---|---|---|
-| Ciclo de vida | Cada petición ejecuta el script desde cero (share-nothing). | El JSP se traduce y compila a un Servlet una vez; luego una instancia atiende múltiples hilos (`init → service → destroy`). |
-| Rendimiento | Arranque rápido, bajo consumo; OPcache/JIT en PHP 8. | Primera petición más lenta (compilación) y más memoria (JVM), pero muy eficiente en carga sostenida. |
-| Despliegue | Copiar archivos a `htdocs/` o al docroot; cero compilación. | Empaquetar WAR o carpeta en `webapps/`; requiere JDK, Tomcat y `web.xml`/anotaciones. |
-| Gestión de estado | `$_SESSION` (archivos en disco por defecto; Redis/BD opcional). | `HttpSession` en memoria del contenedor (objetos Java); soporta clustering/persistencia. |
-| Seguridad (XSS) | Escape manual con `htmlspecialchars`. | `<c:out>`/EL con JSTL escapa por defecto; EL sin `c:out` **no** escapa. |
-| Tipado y errores | Dinámico (tipado opcional en PHP 8). | Estático (Java), errores de compilación tempranos. |
-| Madurez del ecosistema | Composer/Packagist, Laravel, Symfony, WordPress; hosting barato y masivo. | Jakarta EE, Spring, Maven/Gradle; fuerte en entornos empresariales y bancarios. |
-| Curva de aprendizaje | Baja. | Media-alta. |
+| Criterio               | PHP                                                                       | JSP                                                                                                                         |
+| ---------------------- | ------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Ciclo de vida          | Cada petición ejecuta el script desde cero (share-nothing).               | El JSP se traduce y compila a un Servlet una vez; luego una instancia atiende múltiples hilos (`init → service → destroy`). |
+| Rendimiento            | Arranque rápido, bajo consumo; OPcache/JIT en PHP 8.                      | Primera petición más lenta (compilación) y más memoria (JVM), pero muy eficiente en carga sostenida.                        |
+| Despliegue             | Copiar archivos a `htdocs/` o al docroot; cero compilación.               | Empaquetar WAR o carpeta en `webapps/`; requiere JDK, Tomcat y `web.xml`/anotaciones.                                       |
+| Gestión de estado      | `$_SESSION` (archivos en disco por defecto; Redis/BD opcional).           | `HttpSession` en memoria del contenedor (objetos Java); soporta clustering/persistencia.                                    |
+| Seguridad (XSS)        | Escape manual con `htmlspecialchars`.                                     | `<c:out>`/EL con JSTL escapa por defecto; EL sin `c:out` **no** escapa.                                                     |
+| Tipado y errores       | Dinámico (tipado opcional en PHP 8).                                      | Estático (Java), errores de compilación tempranos.                                                                          |
+| Madurez del ecosistema | Composer/Packagist, Laravel, Symfony, WordPress; hosting barato y masivo. | Jakarta EE, Spring, Maven/Gradle; fuerte en entornos empresariales y bancarios.                                             |
+| Curva de aprendizaje   | Baja.                                                                     | Media-alta.                                                                                                                 |
 
 ## 6. Evidencias (completar con capturas)
 
@@ -134,8 +130,8 @@ git init
 git add .
 git commit -m "Lab 09: Sistema de Registro de Contacto PHP y JSP"
 git branch -M main
-git remote add origin https://github.com/TU_USUARIO/lab09-registro-contacto.git
-git push -u origin main      # usuario: TU_USUARIO · contraseña: Personal Access Token
+git remote add origin https://github.com/Anthony-Valencia/practica-02-semana-09-daw-hp.git
+git push -u origin main
 ```
 
 El token se crea en GitHub → Settings → Developer settings → Personal access tokens (permiso `repo`).
